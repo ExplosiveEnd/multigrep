@@ -12,11 +12,11 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>>{
         .filter(|r| r.is_file()) {
         println!("Checking: {:?}", path);
 
-        let t: String = check_type(&path).parse().unwrap();
+        let typed: String = check_type(&path).parse().unwrap();
 
-        println!("Inputting {:}", t);
+        println!("Inputting {:}", typed);
 
-        match t.as_str(){
+        match typed.as_str(){
             "docx" => {
                 let mut file = Docx::open(path).expect("Cannot open file. ::");
                 let mut buf = String::new();
@@ -25,24 +25,45 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>>{
                 println!("{buf}\n");
             },
 
-            "txt" | "py" | "cpp" | "rs" | "md" => {
-                let content = fs::read_to_string(path).unwrap();
-                let res = search(&config.query, &content);
+            "xlsx" => {
+                let mut file = Xlsx::open(path).expect("Cannot open file. ::");
+                let mut buf = String::new();
+                file.read_to_string(&mut buf).expect("Couldn't read open file. ::");
+                println!("Opening XLSX ::");
+                println!("{buf}\n");
+            },
 
-                println!("Opening FILE ::");
-                for lines in res{
-                    println!("{lines}");
-                }
-                println!("");
+            "pptx" => {
+                let mut file = Pptx::open(path).expect("Cannot open file. ::");
+                let mut buf = String::new();
+                file.read_to_string(&mut buf).expect("Couldn't read open file. ::");
+                println!("Opening PPTX ::");
+                println!("{buf}\n");
+            },
+
+            "DS_Store" | "lock" => {
+                println!("Not openable ::\n");
             },
 
             _ => {
-                println!("Not openable ::\n");
+                let content = fs::read_to_string(path).unwrap();
+
+                match search(&config.query, &content){
+                    Some(res) =>{
+                        println!("Opening FILE ::");
+                        for lines in res{
+                            println!("{lines}");
+                        }
+                        println!();
+                    },
+                    None => {
+                        println!("Found nothing. ::\n");
+                    }
+                };
+
             },
         };
     }
-
-
 
     Ok(())
 }
@@ -54,7 +75,7 @@ fn check_type(path: &PathBuf) -> String{
     return ret.get(2).unwrap().to_string();
 }
 
-fn search<'a>(needle: &String, content: &'a String) -> Vec<&'a str>{
+fn search<'a>(needle: &String, content: &'a String) -> Option<Vec<&'a str>>{
     let mut result = Vec::new();
     let query = needle.to_lowercase();
     for line in content.lines(){
@@ -62,7 +83,17 @@ fn search<'a>(needle: &String, content: &'a String) -> Vec<&'a str>{
             result.push(line);
         }
     }
-    result
+
+    match result.len(){
+        0 => {
+            None
+        },
+        _ => {
+            println!("Found {:} line(s)", result.len());
+            Some(result)
+        }
+    }
+
 }
 
 
