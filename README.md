@@ -1,2 +1,2 @@
 # multigrep
-multi-minigrep \
+multi-minigrep

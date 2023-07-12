@@ -47,12 +47,13 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>>{
 
             _ => {
                 let content = fs::read_to_string(path).unwrap();
+                let mut line_nums: Vec<i32> = Vec::new();
 
-                match search(&config.query, &content){
+                match search(&config.query, &content, &mut line_nums){
                     Some(res) =>{
                         println!("Opening FILE ::");
-                        for lines in res{
-                            println!("{lines}");
+                        for index in 0..res.len() {
+                            println!("[{:}]> {:}", line_nums.get(index).unwrap(), res.get(index).unwrap());
                         }
                         println!();
                     },
@@ -75,12 +76,15 @@ fn check_type(path: &PathBuf) -> String{
     return ret.get(2).unwrap().to_string();
 }
 
-fn search<'a>(needle: &String, content: &'a String) -> Option<Vec<&'a str>>{
+fn search<'a>(needle: &String, content: &'a String, line_nums: &mut Vec<i32>) -> Option<Vec<&'a str>>{
     let mut result = Vec::new();
+    let mut index = 0;
     let query = needle.to_lowercase();
     for line in content.lines(){
+        index+=1;
         if line.to_lowercase().contains(&query){
             result.push(line);
+            line_nums.push(index);
         }
     }
 
