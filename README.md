@@ -2,7 +2,7 @@
 
 Multigrep is an extension to the Rust project “minigrep”, outlined within the official Rust book. The goal of multigrep is to make searching for keywords across multiple files / directories faster and easier than the standard file explorer. Currently, the application runs via a CLI, so to start the program enter the directory via CMD / terminal, and run the file, adding an argument for the `needle`, or the key term you’re searching for:
 
-```rust
+```bash
 cargo run -- {needle}
 ```
 
