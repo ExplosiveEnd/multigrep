@@ -25,7 +25,7 @@ If the `needle` is found, it will print the line containing the `needle` to the 
     - [x]  Displaying line(s) containing the `needle` as well as line number
 - [ ]  Enter into subdirectories from within parent directory
     - [ ]  Scan files within that directory for the same criteria
-    - [ ]  (?) Ignore hidden folders
+    - [ ]  Ignore hidden folders (?)
 - [ ]  Create a GUI similar to file explorer, listing selectable files
     - [ ]  Allows for searching, displaying only selectable files containing the `needle`
 - [ ]  Add the ability to read from more file types
