@@ -6,7 +6,7 @@ Multigrep is an extension to the Rust project “minigrep”, outlined within th
 cargo run -- {needle}
 ```
 
-*You must have Cargo installed on your computer to run the file.
+*You must have `Cargo` installed on your computer to run the file.*
 
 If the `needle` is found, it will print the line containing the `needle` to the standard output, as well as containing the file name(s) and line number(s) in which they occur.
 
