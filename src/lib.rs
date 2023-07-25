@@ -107,7 +107,7 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn build<'a>(args: &'a[String], directs: fs::ReadDir) -> Result<Config, &'a str>{
+    pub fn build(args: &[String], directs: fs::ReadDir) -> Result<Config, &str> {
         if args.len() < 2 {
             return Err("not enough args");
         }
